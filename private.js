@@ -47,3 +47,27 @@ var MYAPP = function(){
 	}
 }()
 MYAPP.getName();
+
+
+//构造函数私有属性和原型对象字面量私有属性
+function  Gadget(){
+	//私有成员
+	var name = 'ipod';
+	//公有函数
+	this.getName = function(){
+		return name;
+	}
+}
+Gadget.prototype = (function(){
+	//私有成员
+	var browser = 'webkit';
+	//公有原型成员
+	return {
+		getBrowser:function(){
+			return browser;
+		}
+	}
+}())
+var gadget = new Gadget();
+console.log(gadget.getBrowser());//特权原型方法
+console.log(gadget.getName());//特权'own'方法
