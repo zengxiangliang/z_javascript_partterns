@@ -71,3 +71,62 @@ Gadget.prototype = (function(){
 var gadget = new Gadget();
 console.log(gadget.getBrowser());//特权原型方法
 console.log(gadget.getName());//特权'own'方法
+
+
+//将私有方法揭示为公共方法
+var myArray;
+(function(){
+	var astr = "[object Array]";
+		toString = Object.prototype.toString;
+	function isArray(a){
+		return toString.call(a) === astr;
+	}
+	function indexOf(hayStack,needle){
+		var i = 0,
+			max = hayStack.length;
+		for(;i<max;i++){
+			if(hayStack[i]===needle){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	myArray = {
+		isArray:isArray,
+		indexOf:indexOf,
+		inArray:indexOf
+	}
+}())
+
+console.log(myArray.isArray([1,2]));
+console.log(myArray.isArray({1:2}));
+console.log(myArray.indexOf([1,4,5,6,7],5));
+console.log(myArray.inArray([1,4,7,9],4));
+
+
+//揭示模块模式
+var MYAPP = function(){
+	var astr = '[object Array]',
+		toString  = Object.prototype.toString,
+		isArray = function(a){
+			return toString.call(a) === astr;
+		},
+		indexOf = function(hayStack,needle){
+			var i = 0,
+				max = hayStack.length;
+			for (;i<max;i++) {
+				if(hayStack[i] === needle){
+					return i;
+				}
+			}
+		}
+		
+		return {
+			isArray:isArray,
+			indexOf:indexOf,
+			inArray:indexOf
+		}
+}();
+console.log(MYAPP.isArray([1,4]));
+console.log(MYAPP.indexOf([23,54,7,8],8));
